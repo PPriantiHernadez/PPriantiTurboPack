@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>Consumo de API Random User</title>
+
+<h1>TConsumo de API Random User</h1>
+<button type="button" class="btn btn-primary" id="newUserBtn">Nuevo Usuario</button>
+<button  type="button" class="btn btn-secondary" id="clearTableBtn">Limpiar Tabla</button>
+<table class="table" id="userTable">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo Electrónico</th>
+            <th>Dirección</th>
+            <th>Género</th>
+            <th>Foto de Perfil</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // Función para obtener y mostrar un nuevo usuario
+        function getNewUser() {
+            $.ajax({
+                url: 'https://randomuser.me/api/',
+                dataType: 'json',
+                success: function (data) {
+                    var user = data.results[0];
+                    var fullName = user.name.first + ' ' + user.name.last;
+                    var email = user.email;
+                    var address = user.location.street.name + ', ' + user.location.city + ', ' + user.location.country;
+                    var gender = user.gender;
+                    var picture = user.picture.medium;
+
+                    var newRow = '<tr>' +
+                        '<td>' + fullName + '</td>' +
+                        '<td>' + email + '</td>' +
+                        '<td>' + address + '</td>' +
+                        '<td>' + gender + '</td>' +
+                        '<td><img src="' + picture + '" alt="Profile Picture"></td>' +
+                        '</tr>';
+
+                    $('#userTable tbody').append(newRow);
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            });
+        }
+
+        // Botón para solicitar un nuevo usuario
+        $('#newUserBtn').click(function () {
+            getNewUser();
+        });
+
+        // Botón para limpiar la tabla
+        $('#clearTableBtn').click(function () {
+            $('#userTable tbody').empty();
+        });
+    });
+</script>
+
